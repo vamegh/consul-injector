@@ -1,0 +1,30 @@
+---
+
+## Ansi color codes have to be enclosed in double quotes
+color_map:
+  black:        "\x1b[0;30m"
+  blue:         "\x1b[0;34m"
+  cyan:         "\x1b[0;36m"
+  green:        "\x1b[0;32m"
+  grey:         "\x1b[0;37m"
+  red:          "\x1b[0;4;31m"
+  wht_red:      "\x1b[0;4;47;31m"
+  lgt_red:      "\x1b[1;31m"
+  wht_lgt_red:  "\x1b[1;4;47;31m"
+  yellow:       "\x1b[1;33m"
+  blk_ylw:      "\x1b[1;4;40;33m"
+  drk_grey:     "\x1b[1;4;47;30m"
+  white:        "\x1b[1;37m"
+  magenta:      "\x1b[1;35m"
+  reset:        "\x1b[0m"
+  debug:        'grey'
+  info:         'blue'
+  warning:      'yellow'
+  error:        'lgt_red'
+  critical:     'red'
+  lvl_debug:    'grey'
+  lvl_info:     'green'
+  lvl_warning:  'blk_ylw'
+  lvl_error:    'wht_red'
+  lvl_critical: 'wht_lgt_red'
+

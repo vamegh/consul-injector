@@ -1,0 +1,49 @@
+---
+version: '2'
+services:
+  poc-consulm1:
+    build: consul/.
+    image: poc/consulm1
+    container_name: consulm1
+    hostname: consulm1.node.consul
+    command: agent -config-file=/opt/shared/consul-config/consulm1.json
+    ports:
+      - 8300:8300
+      - 8500:8500
+      - 8600:8600/udp
+    volumes:
+      - ./data/shared:/opt/shared
+    networks:
+      - poc-net
+    dns:
+      - consulm1:8600
+      - consulm2:8601
+      - 8.8.8.8
+    dns_search:
+      - node.consul
+      - service.consul
+  poc-consulm2:
+    build: consul/.
+    image: poc/consulm2
+    container_name: consulm2
+    hostname: consulm2.node.consul
+    command: agent -config-file=/opt/shared/consul-config/consulm2.json
+    ports:
+      - 8301:8301
+      - 8501:8501
+      - 8601:8601/udp
+    volumes:
+      - ./data/shared:/opt/shared
+    networks:
+      - poc-net
+    dns:
+      - consulm1:8600
+      - consulm2:8601
+      - 8.8.8.8
+    dns_search:
+      - node.consul
+      - service.consul
+
+networks:
+  poc-net:
+

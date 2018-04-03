@@ -1,0 +1,27 @@
+{
+  "datacenter": "VH1",
+  "log_level": "INFO",
+  "node_name": "consulm2",
+  "bind_addr": "0.0.0.0",
+  "client_addr": "0.0.0.0",
+  "encrypt": "eF3rhE566s4mT2ZQzH5apw==",
+  "acl_datacenter": "VH1",
+  "acl_master_token": "l3tm31n",
+  "acl_default_policy": "allow",
+  "bootstrap": false,
+  "ports": {
+    "dns": 8601,
+    "http": 8501
+  },
+  "enable_debug": false,
+  "server": true,
+  "enable_script_checks": true,
+  "leave_on_terminate": false,
+  "skip_leave_on_interrupt": true,
+  "rejoin_after_leave": true,
+  "retry_join": [
+    "consulm1",
+    "consulm2"
+  ]
+}
+

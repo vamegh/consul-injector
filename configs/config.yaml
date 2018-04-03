@@ -1,0 +1,33 @@
+---
+## Central Yaml Config file
+# This pulls in all of the various config elements to create a unified data dictionary used within this tool
+
+
+config_path: '/etc/consul-injector'
+temp_path: '/tmp/consul-injector'
+
+## logging
+## can be debug, info, warning, error or critical
+logging_config:
+  log_level: "info"
+  log_file: '/var/log/consul-injector/injector.log'
+  log_file_level: 'info'
+
+# The various generic config files, required to make most of the libs work correctly
+color_map: '/etc/consul-injector/color_map.yaml'
+git_config: '/etc/consul-injector/git_config.yaml'
+
+## The data to be injected into consul - this is the raw data to populate consul KV Store
+# Each file that is to be parsed must be added here - you can add as many as you like.
+consul_data_configs:
+  injector1: '/etc/consul-injector/data/inject1.yaml'
+  injector2: '/etc/consul-injector/data/inject2.yaml'
+  injector3: '/etc/consul-injector/data/inject3.yaml'
+  injector4: '/etc/consul-injector/data/inject4.yaml'
+  injector5: '/etc/consul-injector/data/inject5.yaml'
+
+## consul api configuration file
+# If you would like to use an alternate consul server / config,
+# modify this to use your new configuration file, or modify the consul_config.yaml.
+consul_config: '/etc/consul-injector/consul_config.yaml'
+

@@ -1,0 +1,18 @@
+---
+
+## Data to be injected into Consul (inject file 1)
+
+testing:
+  apache:
+    version: "3.2.4"
+    install_path: "/opt/apache"
+    status: "success"
+  application_components:
+    test1:
+      version: "0.0.1"
+      status: "success"
+    test2:
+      version: "0.0.2"
+      status: "success"
+  system: "centuri"
+  release: "alpha"

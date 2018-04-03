@@ -1,0 +1,57 @@
+#!/usr/bin/env python3.6
+#
+##
+##########################################################################
+#                                                                        #
+#       consul-injector                                                  #
+#                                                                        #
+#       (c) 2018 Vamegh Hedayati                                         #
+#                                                                        #
+#       Vamegh Hedayati <gh_vhedayati AT ev9 DOT io>                     #
+#                                                                        #
+#       Please see Copying for License Information                       #
+#                             GNU/LGPL                                   #
+##########################################################################
+##
+#
+from vstdlib import api, command_parser, config_parser, custom_logger, socket_lock, sorter
+
+__version__ = '0.0.1'
+
+def main():
+    data_inject = config['consul_inject']
+    sort = sorter.DataSort()
+    consul_dict = sort.iterator(value=data_inject)
+    consul_api = api.REST(config=config['consul_config'])
+    for k, v in consul_dict.items():
+        consul_data = {}
+        consul_data[k] = v
+        put_result = consul_api.put(payload=consul_data)
+        logging.info("Payload Put Result: %s", put_result)
+        get_result = consul_api.get(query=k)
+        logging.info("Payload Get Result: %s", get_result)
+
+if __name__ == "__main__":
+    name = 'consul-injector'
+    '''initialise the command line checker -- add in all of the options'''
+    cmd_opts = command_parser.Commands(name=name, version=__version__)
+    cmd_opts.add_config()
+    cmd_opts.add_debug()
+    cmd_opts.add_git()
+    cmd_opts.add_consul()
+    options, args, parser = cmd_opts.set_options()
+    '''parse through the provided options make sure everything is set as required'''
+    cmd_check = command_parser.CommandCheck(options=options, parser=parser)
+    cfg_check = config_parser.ConfigParse(options=options, parser=parser)
+    ''' check through the command line options - ensure that they are correct'''
+    cmd_check.debug()
+    ''' scan through the yaml config file(s) and fix up the imported data'''
+    raw_config = cmd_check.config()
+    config = cfg_check.scan_yaml(raw_cfg=raw_config)
+    ''' set up the logging '''
+    logging = custom_logger.colourLog(name=name, config=config)
+    config['logging'] = logging
+    ''' check and lock this process to a socket -- to stop duplicate runs'''
+    socket = socket_lock.lock(name=name)
+
+    main()

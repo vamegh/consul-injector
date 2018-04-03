@@ -1,0 +1,22 @@
+{
+  "datacenter": "VH1",
+  "log_level": "INFO",
+  "bind_addr": "0.0.0.0",
+  "client_addr": "0.0.0.0",
+  "data_dir": "/opt/shared/consul-config/j2mConsuldata/",
+  "encrypt": "eF3rhE566s4mT2ZQzH5apw==",
+  "ports": {
+    "dns": -1
+  },
+  "server": false,
+  "bootstrap": false,
+  "enable_script_checks": true,
+  "leave_on_terminate": false,
+  "skip_leave_on_interrupt": true,
+  "rejoin_after_leave": true,
+  "retry_join": [
+    "consulm1",
+    "consulm2"
+  ]
+}
+

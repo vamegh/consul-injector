@@ -1,0 +1,16 @@
+---
+
+## GIT Connection Information
+git_config:
+  gitlab_config:
+    login_user: 'admin'
+    login_pass: 'admin'
+    host: '127.0.0.1'
+    port: '22'
+    repo_path: '/consul-data/consul_data.git'
+    clone_path: "/tmp/consul-injector/consul_data"
+    branch: 'master'
+    author_name: 'consul-injector'
+    author_email: 'consul@injector.com'
+    commit_path: 'testing'
+    repo_name: 'consul_data'

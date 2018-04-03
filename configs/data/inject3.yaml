@@ -1,0 +1,9 @@
+---
+
+## Data to be injected into Consul (inject file 3)
+
+testing3:
+  applications:
+    tomcat:
+      version: "10.0.1"
+      status: "success"

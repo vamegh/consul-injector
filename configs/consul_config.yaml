@@ -1,0 +1,14 @@
+---
+## Consul Config file - do not call this directly, this is called by config.yaml
+
+consul_config:
+  acl_token: 'l3tm31n'
+  host: '127.0.0.1'
+  port: '8500'
+  query_path: '/v1/kv'
+  use_ssl: false
+  verify_ssl: false
+  query_headers:
+    Content-type: 'application/json'
+    Accept: 'application/json'
+

@@ -1,0 +1,11 @@
+futures
+futurist
+httplib2
+ipaddress
+paramiko
+PyYAML
+requests
+requests-futures
+sh
+urllib3
+monotonic
