@@ -16,7 +16,7 @@
 #
 from vstdlib import api, command_parser, config_parser, custom_logger, socket_lock, sorter
 
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 
 def main():
     data_inject = config['consul_inject']
@@ -27,9 +27,10 @@ def main():
         consul_data = {}
         consul_data[k] = v
         put_result = consul_api.put(payload=consul_data)
-        logging.info("Payload Put Result: %s", put_result)
+        logging.info("Put Result: %s", put_result)
         get_result = consul_api.get(query=k)
-        logging.info("Payload Get Result: %s", get_result)
+        for i, result in enumerate(get_result):
+            logging.info("Consul Url: %s :: Value: %s", get_result[i]["Key"], get_result[i]["Value"])
 
 if __name__ == "__main__":
     name = 'consul-injector'

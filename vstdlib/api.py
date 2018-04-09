@@ -77,15 +77,16 @@ class REST(object):
                                 verify=self.verify,
                                 headers=self.consul_headers)
         except Exception as e:
-            logging.error("GET :: error :: ", str(e))
+            logging.error("GET :: Message :: %s", str(e))
             return False
         except:
-            logging.error("GET :: error :: ", sys.exc_info()[0])
+            logging.error("GET :: Message :: %s", sys.exc_info()[0])
             raise
         status_code = data.status_code
         if status_code in self.good_status:
             if data.json():
                 full_data = data.json()
+                logging.debug("Data Output: %s", full_data)
                 for i, nv in enumerate(full_data):
                     json_data = base64.b64decode(nv["Value"])
                     full_data[i]["Value"] = json_data
@@ -108,10 +109,10 @@ class REST(object):
             return False
         if isinstance(payload, dict):
             endpoint = list(payload.keys())[0]
-            value = payload[endpoint]
-            print ("Endpoint : {} :: Value: {}".format(endpoint, value))
+            value = str(payload[endpoint])
+            logging.debug("Endpoint : %s :: Value: %s", endpoint, value)
         else:
-            logging.error("Error: Payload must be JSON")
+            logging.error("Message: Payload must be JSON")
             sys.exit(1)
         post_url = self.consul_url +  endpoint
         try:
@@ -120,11 +121,11 @@ class REST(object):
                                  verify=self.verify,
                                  data=value)
         except Exception as e:
-            logging.error("error :: ", str(e))
+            logging.error("Message: %s", str(e))
             return False
         except:
-            logging.error("error :: ", sys.exc_info()[0])
-            raise
+            logging.error("Message: %s", sys.exc_info()[0])
+            return False
         status_code = data.status_code
         if status_code in self.good_status:
             return status_code

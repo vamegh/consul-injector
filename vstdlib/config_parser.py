@@ -39,8 +39,7 @@ class ConfigParse(object):
                 yaml_data = yaml.safe_load(config)
             return yaml_data
         except (TypeError, IOError) as e:
-            print("Error: Reading Yaml :: {} :: skipping".format(str(e)))
-            return False
+            print("Error: {} :: Reading Yaml File :: {} :: skipping".format(str(e), config_file))
         return False
 
     def read_json(self, config_file=''):
@@ -49,17 +48,13 @@ class ConfigParse(object):
                 json_data = json.loads(config)
             return json_data
         except (TypeError, IOError) as e:
-            print("Error: Reading Json :: {} :: skipping".format(str(e)))
-            return False
+            print("Error: {} :: Reading Json File :: {} :: skipping".format(str(e), config_file))
         return False
 
     def read_file(self, config_file=''):
-        config_data  = self.read_json(config_file=config_file)
+        config_data  = self.read_yaml(config_file=config_file)
         if not config_data:
-            config_data  = self.read_yaml(config_file=config_file)
-            if not config_data:
-                print("Error: Reading File :: {} :: Exiting".format(config_file))
-                sys.exit(1)
+            config_data  = self.read_json(config_file=config_file)
         return config_data
 
     def combine_config(self, cfg_data=None):
