@@ -21,7 +21,7 @@ __version__ = '0.1.1'
 def main():
     data_inject = config['consul_inject']
     sort = sorter.DataSort()
-    consul_dict = sort.iterator(value=data_inject)
+    consul_dict = sort.recursor(value=data_inject)
     consul_api = api.REST(config=config['consul_config'])
     for k, v in consul_dict.items():
         consul_data = {}
