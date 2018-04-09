@@ -25,7 +25,7 @@ class DataSort(object):
                 self.iterator(key=fk, value=nv)
         elif isinstance(value, list):
             for i, nv in enumerate(value):
-                fk = "{}/{}".format(key, i)
+                fk = "{}[{}]".format(key, i)
                 self.iterator(key=fk, value=nv)
         else:
             self.sorted_data[key] = value

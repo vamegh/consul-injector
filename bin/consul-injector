@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.6
+#!/usr/bin/env python
 #
 ##
 ##########################################################################
@@ -16,7 +16,7 @@
 #
 from vstdlib import api, command_parser, config_parser, custom_logger, socket_lock, sorter
 
-__version__ = '0.0.1'
+__version__ = '0.1.0'
 
 def main():
     data_inject = config['consul_inject']
@@ -47,7 +47,7 @@ if __name__ == "__main__":
     cmd_check.debug()
     ''' scan through the yaml config file(s) and fix up the imported data'''
     raw_config = cmd_check.config()
-    config = cfg_check.scan_yaml(raw_cfg=raw_config)
+    config = cfg_check.scan_config(raw_cfg=raw_config)
     ''' set up the logging '''
     logging = custom_logger.colourLog(name=name, config=config)
     config['logging'] = logging

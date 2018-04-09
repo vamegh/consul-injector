@@ -31,18 +31,27 @@ class Commands(object):
 
     def add_config(self):
         self.parser.add_option('-c', '--config', action='store', default='/etc/consul-injector/config.yaml',
-                               help='Provide a custom configuration file, defaults to /etc/consul-injector/config.yaml if none provided')
+                               help=' '.join(['Provide a custom configuration file,',
+                                              'defaults to /etc/consul-injector/config.yaml if none provided']))
+        self.parser.add_option('-d', '--data_file', action='append', default=None,
+                               help=' '.join(['Provide data files to import (optional)',
+                                              'this can be called multiple times to import multiple files,',
+                                              'This is the data to import into consul example:',
+                                              '-D <path>/data1.yaml -D <path>/data2.json -D <path>/data3.yaml etc.']))
         self.parser.add_option('--force', action='store_true',
                                dest='force', default=False,
                                help='Force running script (if you must run as root)- use with care')
 
     def add_git(self):
         self.parser.add_option('-b', '--branch', action='store', default=None,
-                               help='Provide a custom git branch to use, defaults to branch specified in config file or master if none provided')
+                               help=' '.join(['Provide a custom git branch to use, defaults to',
+                                              'branch specified in config file or master if none provided']))
 
     def add_debug(self):
-        self.parser.add_option('-d', '--debug', action='store', type='int', default=None,
-                               help='set debugging level (an integer value the higher the more debugging output that will be provided)')
+        self.parser.add_option('-D', '--debug', action='store', type='int', default=None,
+                               help=' '.join(['set debugging level: ',
+                                              'an integer value between 1 to 5 (the higher the more',
+                                              'debugging output that will be provided)']))
 
     def add_consul(self):
         self.parser.add_option('-H', '--host', action='store', default=None,
@@ -75,9 +84,7 @@ class CommandCheck(object):
                 print ("\nConfig File Issue: %s :: Error : %s\n" % (self.options.config, e[1]))
                 self.parser.print_help()
                 sys.exit(1)
-        return config_data
 
     def debug(self):
-        # type: () -> object
         if self.options.debug:
-            print ("Setting modifying log level to match debug level")
+            print("Setting log level to match debug level")

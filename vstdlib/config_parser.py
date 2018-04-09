@@ -19,6 +19,7 @@ import os.path
 import re
 import sys
 import yaml
+import json
 
 from sys import version_info
 py2 = version_info[0] == 2
@@ -37,20 +38,41 @@ class ConfigParse(object):
             with open(config_file, "r") as config:
                 yaml_data = yaml.safe_load(config)
             return yaml_data
-        except IOError as e:
-            print ("Error: %s :: skipping" % (str(e)))
+        except (TypeError, IOError) as e:
+            print("Error: Reading Yaml :: {} :: skipping".format(str(e)))
+            return False
+        return False
+
+    def read_json(self, config_file=''):
+        try:
+            with open(config_file, "r") as config:
+                json_data = json.loads(config)
+            return json_data
+        except (TypeError, IOError) as e:
+            print("Error: Reading Json :: {} :: skipping".format(str(e)))
+            return False
+        return False
+
+    def read_file(self, config_file=''):
+        config_data  = self.read_json(config_file=config_file)
+        if not config_data:
+            config_data  = self.read_yaml(config_file=config_file)
+            if not config_data:
+                print("Error: Reading File :: {} :: Exiting".format(config_file))
+                sys.exit(1)
+        return config_data
 
     def combine_config(self, cfg_data=None):
         try:
             color_map = cfg_data['color_map']
-            color_data = self.read_yaml(config_file=color_map)
+            color_data = self.read_file(config_file=color_map)
             if color_data:
                 cfg_data.update(color_data)
         except KeyError as err:
             print ("color map not supplied :: Error: %s :: skipping", err)
         try:
             git_config = cfg_data['git_config']
-            git_data = self.read_yaml(config_file=git_config)
+            git_data = self.read_file(config_file=git_config)
             if git_data:
                 cfg_data.update(git_data)
         except KeyError as err:
@@ -58,7 +80,7 @@ class ConfigParse(object):
             sys.exit(1)
         try:
             consul_config = cfg_data['consul_config']
-            consul_cfg_data = self.read_yaml(config_file=consul_config)
+            consul_cfg_data = self.read_file(config_file=consul_config)
             if consul_cfg_data:
                 cfg_data.update(consul_cfg_data)
         except KeyError as err:
@@ -67,17 +89,21 @@ class ConfigParse(object):
         try:
             consul_data = {}
             cfg_data["consul_inject"] = {}
+            if self.options.data_file:
+                cfg_data['consul_data_configs'] = {}
+                for i, newfile in enumerate(self.options.data_file):
+                    filename = "inject" + str(i)
+                    cfg_data['consul_data_configs'][filename] = newfile
             for consul_key, consul_value in cfg_data['consul_data_configs'].items():
-                consul_data["consul_data"] = self.read_yaml(config_file=consul_value)
+                consul_data["consul_data"] = self.read_file(config_file=consul_value)
                 if consul_data["consul_data"]:
                     cfg_data["consul_inject"].update(consul_data["consul_data"])
         except KeyError as err:
             print ("consul data not Found :: Error: %s", err)
             sys.exit(1)
-
         return cfg_data
 
-    def scan_yaml(self, raw_cfg=None):
+    def scan_config(self, raw_cfg=None):
         ## combine the various configs into 1 config
         raw_cfg = self.combine_config(cfg_data=raw_cfg)
         ## process the config

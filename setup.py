@@ -5,7 +5,7 @@ from setuptools import setup
 
 setup(
     name='consul-injector',
-    version='0.0.1',
+    version='0.1.0',
     description='consul-injector a tool to inject KV values into consul via its api, to help with automation',
     author='Vamegh Hedayati',
     author_email='gh_vhedayati@ev9.io',
