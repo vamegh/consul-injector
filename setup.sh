@@ -19,7 +19,7 @@ sudo -H pip install virtualenv
 sudo rm -rf build/
 sudo rm -rf dist/
 sudo rm -rf consul_injector.egg-info
-sudo /usr/bin/env python3 setup.py install
+sudo /usr/bin/env python setup.py install
 sudo rm -rf build/
 sudo rm -rf dist/
 sudo rm -rf consul_injector.egg-info

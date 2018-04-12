@@ -1,11 +1,11 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 ### (c) Vamegh Hedayati LGPL License please read the License file for more info.
 from setuptools import setup
 
 setup(
     name='consul-injector',
-    version='0.1.3',
+    version='0.1.4',
     description='consul-injector a tool to inject KV values into consul via its api, to help with automation',
     author='Vamegh Hedayati',
     author_email='gh_vhedayati@ev9.io',

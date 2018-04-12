@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 #
 ##
 ##########################################################################
@@ -16,7 +16,7 @@
 #
 from vstdlib import api, command_parser, config_parser, custom_logger, socket_lock, sorter
 
-__version__ = '0.1.3'
+__version__ = '0.1.4'
 
 def main():
     data_inject = config['consul_inject']
