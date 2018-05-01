@@ -2,7 +2,7 @@
 A simple Python Utility to inject KV pairs into Consul, Useful for Automation
 
 # consul-extractor
-A simple Python Utility to extractt KV pairs from Consul, Useful for Automation
+A simple Python Utility to extract KV pairs from Consul, Useful for Automation
 
 ## Introduction:
 This little utility is designed to allow quick population of newly installed consul servers - it serves as a method to repopulate consul servers or to add new KV data or to extract KV data.
@@ -16,7 +16,7 @@ A simple docker-compose is provided in the docker/ directory, first steps:
   docker-compose up -d
 ```
 
-This should bring up the docker containers, open a browser go to http://1227.0.0.1:8500
+This should bring up the docker containers, open a browser go to http://localhost:8500
 The Consul ui should be present the acl_token is l3tm31n.
 
 next run setup.sh this should setup everything necessary to make this tool work. It will also be necessary to run the following:
