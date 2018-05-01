@@ -5,7 +5,7 @@ from setuptools import setup
 
 setup(
     name='consul-injector',
-    version='0.1.4',
+    version='0.1.5',
     description='consul-injector a tool to inject KV values into consul via its api, to help with automation',
     author='Vamegh Hedayati',
     author_email='gh_vhedayati@ev9.io',
@@ -24,6 +24,7 @@ setup(
     ],
     scripts=[
         'bin/consul-injector',
+        'bin/consul-extractor',
     ],
     package_data={'vstdlib': ['Copying', 'LICENSE', 'README.md'], },
     data_files=[('/etc/consul-injector', ['configs/color_map.yaml',

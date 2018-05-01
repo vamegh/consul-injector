@@ -49,13 +49,16 @@ class REST(object):
             self.verify = config["verify_ssl"]
         except KeyError as e:
             self.verify = False
-
         try:
             url = config["url"]
         except KeyError as e:
             logging.error('''Configurations should be passed as a dict,
                 containing url, login_pass, login_user, host and port key/values''')
             sys.exit(1)
+        try:
+            self.query = config["query"]
+        except KeyError as e:
+            self.query = False
 
         self.consul_url = url + '/v1/kv'
         self.consul_headers = {'X-Consul-Token': self.token}
@@ -66,12 +69,14 @@ class REST(object):
 
     def get(self, query=None):
         if query is None:
-            return False
+            if not self.query:
+              return False
+            query = self.query
         if isinstance(query, dict):
             endpoint = list(query.keys())[0]
         else:
             endpoint = query
-        query_url = self.consul_url + endpoint
+        query_url = '/'.join([self.consul_url, endpoint])
         try:
             data = requests.get(query_url,
                                 verify=self.verify,

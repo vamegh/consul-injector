@@ -1,9 +1,12 @@
 # consul-injector
 A simple Python Utility to inject KV pairs into Consul, Useful for Automation
 
+# consul-extractor
+A simple Python Utility to extractt KV pairs from Consul, Useful for Automation
+
 ## Introduction:
-This little utility is designed to allow quick population of newly installed consul servers - it serves as a method to repopulate consul servers or to add new KV data.
-It now supports both json and yaml data files, they can both be supplied at runtime using the -d command line flag, or specified via command line options.
+This little utility is designed to allow quick population of newly installed consul servers - it serves as a method to repopulate consul servers or to add new KV data or to extract KV data.
+It now supports both json and yaml data files, they can both be supplied at runtime using the -d command line flag, or specified via command line options. It supports extracting in either format using the -f or format command line flag.
 
 ## Testing
 A simple docker-compose is provided in the docker/ directory, first steps:
@@ -34,8 +37,10 @@ sudo mkdir /etc/consul-injector
 sudo cp -rpfv configs/* /etc/consul-injector/
 sudo mkdir /var/log/consul-injector
 sudo -s chown ${SUDO_USER}:${SUDO_USER} /var/log/consul-injector
-cp bin/consul-injector .
+cp bin/* .
 ./consul-injector
+## To test extraction of the testing k/v data
+./consul-extractor -q testing -r -f json -o /tmp/testing.json
 ```
 
 This should make and sort out all of the various dependencies, please note the configs are read from /etc/consul-injector this can be modified by modifying configs/config.yaml or specifying the correct command line flag.
@@ -44,9 +49,9 @@ This should make and sort out all of the various dependencies, please note the c
 ##Supported Options:
 
 ```
- ./consul-injector --help
+$ ./consul-injector --help
 Usage: consul-injector [options]
-Version: 0.1.0
+Version: 0.1.5
 
 Options:
   --version             show program's version number and exit
@@ -66,14 +71,50 @@ Options:
                         set debugging level:  an integer value between 1 to 5
                         (the higher the more debugging output that will be
                         provided)
-  -b BRANCH, --branch=BRANCH
-                        Provide a custom git branch to use, defaults to branch
-                        specified in config file or master if none provided
   -H HOST, --host=HOST  add a custom login host defaults to localhost
   -t TOKEN, --token=TOKEN
                         add a custom consul acl token (optional)
   -p PORT, --port=PORT  add a custom consul port defaults to 8500
   --sslverify           enable ssl verification (defaults to False)
+```
+
+```
+$ ./consul-extractor --help
+Usage: consul-extractor [options]
+Version: 0.1.5
+
+Options:
+  --version             show program's version number and exit
+  -h, --help            show this help message and exit
+  -c CONFIG, --config=CONFIG
+                        Provide a custom configuration file, defaults to /etc
+                        /consul-injector/config.yaml if none provided
+  -d DATA_FILE, --data_file=DATA_FILE
+                        Provide data files to import (optional) this can be
+                        called multiple times to import multiple files, This
+                        is the data to import into consul example: -D
+                        <path>/data1.yaml -D <path>/data2.json -D
+                        <path>/data3.yaml etc.
+  --force               Force running script (if you must run as root)- use
+                        with care
+  -D DEBUG, --debug=DEBUG
+                        set debugging level:  an integer value between 1 to 5
+                        (the higher the more debugging output that will be
+                        provided)
+  -H HOST, --host=HOST  add a custom login host defaults to localhost
+  -t TOKEN, --token=TOKEN
+                        add a custom consul acl token (optional)
+  -p PORT, --port=PORT  add a custom consul port defaults to 8500
+  --sslverify           enable ssl verification (defaults to False)
+  -q QUERY, --query=QUERY
+                        add a query to gather information from consul
+                        (required)
+  -o OUTFILE, --outfile=OUTFILE
+                        specify the output path and file - default:
+                        /tmp/consul_extractor_data.json
+  -f FORMAT, --format=FORMAT
+                        specify the output format (json or yaml)
+  -r, --recurse         enables recursive querying (defaults to False)
 ```
 
 ## Feedback

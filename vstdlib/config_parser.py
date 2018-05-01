@@ -39,7 +39,8 @@ class ConfigParse(object):
                 yaml_data = yaml.safe_load(config)
             return yaml_data
         except (TypeError, IOError) as e:
-            print("Error: {} :: Reading Yaml File :: {} :: skipping".format(str(e), config_file))
+            #print("Skipping Yaml Import for: {}".format(config_file))
+            pass
         return False
 
     def read_json(self, config_file=''):
@@ -48,7 +49,8 @@ class ConfigParse(object):
                 json_data = json.loads(config)
             return json_data
         except (TypeError, IOError) as e:
-            print("Error: {} :: Reading Json File :: {} :: skipping".format(str(e), config_file))
+            #print("Skipping Json Import For: {}".format(config_file))
+            pass
         return False
 
     def read_file(self, config_file=''):
@@ -158,6 +160,23 @@ class ConfigParse(object):
                         sys.exit(1)
 
             if key == 'consul_config':
+                try:
+                    if self.options.format:
+                        raw_cfg[key]['format'] = self.options.format
+                except AttributeError:
+                    pass
+                try:
+                    if self.options.outfile:
+                        raw_cfg[key]['outfile'] = self.options.outfile
+                except AttributeError:
+                    raw_cfg[key]['outfile'] = '/tmp/consul_extractor_data.json'
+                try:
+                    if self.options.query:
+                        raw_cfg[key]['query'] = self.options.query
+                        if self.options.recurse:
+                            raw_cfg[key]['query'] = self.options.query + '?recurse'
+                except AttributeError:
+                    pass
                 try:
                     if self.options.token:
                         raw_cfg[key]['acl_token'] = self.options.token

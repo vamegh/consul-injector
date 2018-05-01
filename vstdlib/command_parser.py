@@ -63,6 +63,17 @@ class Commands(object):
         self.parser.add_option('--sslverify', action='store_true',
                                dest='sslverify', default=False,
                                help='enable ssl verification (defaults to False)')
+    def add_query(self):
+        self.parser.add_option('-q', '--query', action='store', default=None,
+                               help='add a query to gather information from consul (required)')
+        self.parser.add_option('-o', '--outfile', action='store', default=None,
+                               help='specify the output path and file - default: /tmp/consul_extractor_data.json')
+        self.parser.add_option('-f', '--format', action='store', default='json',
+                               help='specify the output format (json or yaml)')
+        self.parser.add_option('-r', '--recurse', action='store_true',
+                               dest='recurse', default=False,
+                               help='enables recursive querying (defaults to False)')
+
 
     def set_options(self):
         options, args = self.parser.parse_args()
@@ -88,3 +99,22 @@ class CommandCheck(object):
     def debug(self):
         if self.options.debug:
             print("Setting log level to match debug level")
+
+    def query(self):
+        try:
+            if not self.options.query:
+                self.parser.error("Query is Required")
+        except AttributeError:
+            self.parser.error("Query is Required")
+
+    def format(self):
+        valid_formats = ['json', 'yaml']
+        try:
+          if self.options.format not in valid_formats:
+              self.parser.error("Format must be either json or yaml")
+        except AttributeError:
+            self.options.format = 'json'
+
+
+
+

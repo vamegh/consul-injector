@@ -3,7 +3,7 @@
 ##
 ##########################################################################
 #                                                                        #
-#       consul-injector                                                  #
+#       consul-extractor                                                  #
 #                                                                        #
 #       (c) 2018 Vamegh Hedayati                                         #
 #                                                                        #
@@ -14,45 +14,49 @@
 ##########################################################################
 ##
 #
-from vstdlib import api, command_parser, config_parser, custom_logger, socket_lock, sorter
+from vstdlib import api, command_parser, config_parser, custom_logger, socket_lock, sorter, file_handler
 
 __version__ = '0.1.5'
 
 def main():
-    data_inject = config['consul_inject']
-    sort = sorter.DataSort()
-    consul_dict = sort.recursor(value=data_inject)
+    file_format = config['consul_config']['format']
+    outfile = config['consul_config']['outfile']
     consul_api = api.REST(config=config['consul_config'])
-    for k, v in consul_dict.items():
-        consul_data = {}
-        consul_data[k] = v
-        put_result = consul_api.put(payload=consul_data)
-        logging.info("Put Result: %s", put_result)
-        get_result = consul_api.get(query=k)
-        for i, result in enumerate(get_result):
-            logging.info("Consul Url: %s :: Value: %s", get_result[i]["Key"], get_result[i]["Value"])
+    get_result = consul_api.get()
+    if not get_result:
+        logging.error("Sorry No Matching Results")
+        sys.exit(1)
+    data = {}
+    for i, result in enumerate(get_result):
+        logging.debug("Consul Url: %s :: Value: %s", get_result[i]["Key"], get_result[i]["Value"])
+        data[get_result[i]["Key"]] = get_result[i]["Value"]
+
+    if file_format == 'json':
+        file_handler.write_json(outfile, data)
+    elif file_format == 'yaml':
+        file_handler.write_yaml(outfile, data)
 
 if __name__ == "__main__":
-    name = 'consul-injector'
+    name = 'consul-extractor'
     '''initialise the command line checker -- add in all of the options'''
     cmd_opts = command_parser.Commands(name=name, version=__version__)
     cmd_opts.add_config()
     cmd_opts.add_debug()
     cmd_opts.add_consul()
+    cmd_opts.add_query()
     options, args, parser = cmd_opts.set_options()
     '''parse through the provided options make sure everything is set as required'''
     cmd_check = command_parser.CommandCheck(options=options, parser=parser)
     cfg_check = config_parser.ConfigParse(options=options, parser=parser)
     ''' check through the command line options - ensure that they are correct'''
     cmd_check.debug()
+    cmd_check.query()
+    cmd_check.format()
     ''' scan through the yaml config file(s) and fix up the imported data'''
     raw_config = cmd_check.config()
     config = cfg_check.scan_config(raw_cfg=raw_config)
     ''' set up the logging '''
     logging = custom_logger.colourLog(name=name, config=config)
     config['logging'] = logging
-    ''' check and lock this process to a socket -- to stop duplicate runs'''
-    ''' disabling socket lock - multiple simultaneous instance runs importing data maybe required '''
-    #socket = socket_lock.lock(name=name)
 
     main()
